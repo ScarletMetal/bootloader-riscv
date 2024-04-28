@@ -147,4 +147,10 @@ jobs:
         with:
           name: sophgo-bootloader-${{ matrix.M_CHIP_NUM }}-${{ matrix.LINUX_BRANCH }}
           path: firmware_*
+          retention-days: 1
+      - name: 'Upload Build Artifact - Complete Image'
+        uses: actions/upload-artifact@v3
+        with:
+          name: image-${{ matrix.M_CHIP_NUM }}-${{ matrix.LINUX_BRANCH }}
+          path: full_*
           retention-days: 30
