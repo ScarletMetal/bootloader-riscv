@@ -4,16 +4,13 @@ on:
   push:
   pull_request:
   workflow_dispatch:
-  schedule:
-    - cron: "0 2 * * *"
 
 jobs:
   build-bootloader:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        M_CHIP_NUM: [single, multi]
-        LINUX_BRANCH: [sg2042-dev, sg2042-dev-6.6, sg2042-master]
+        M_CHIP_NUM: [single]
 
     env:
       mainline_toolchain: https://github.com/riscv-collab/riscv-gnu-toolchain/releases/download/2024.03.01
@@ -55,9 +52,9 @@ jobs:
       - name: Checkout linux-riscv
         uses: actions/checkout@v4
         with:
-          repository: sophgo/linux-riscv
+          repository: milkv-community/linux
           path: linux-riscv
-          ref: ${{ matrix.LINUX_BRANCH }}
+          ref: v6.9-rc4-milkv-community
 
       - name: Install software
         run: |
@@ -130,6 +127,18 @@ jobs:
                 mkdir ~/firmware_artifact
                 cp -v $RV_FIRMWARE_INSTALL_DIR/firmware*.bin $GITHUB_WORKSPACE/firmware_${CHIP_NUM}_${BRANCH}.bin
                 cp -v $RV_FIRMWARE_INSTALL_DIR/firmware.img $GITHUB_WORKSPACE/firmware_${CHIP_NUM}_${BRANCH}.img
+              popd
+      - name: Build Complete Image
+        run: |
+              pushd bootloader-riscv
+                source scripts/envsetup.sh
+                # fix build variable in github action
+                source scripts/github_env.sh
+
+                build_rv_all
+
+                mkdir -p ~/firmware_artifact
+                cp -v $RV_OUTPUT_DIR/*.img $GITHUB_WORKSPACE/full_${CHIP_NUM}_${BRANCH}.img
               popd
 
       - name: 'Upload Build Artifact'
