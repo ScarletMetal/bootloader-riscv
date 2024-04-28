@@ -11,6 +11,7 @@ jobs:
     strategy:
       matrix:
         M_CHIP_NUM: [single]
+        LINUX_BRANCH: ["v6.8-sg2042-milkv-community", "v6.9-rc4-milkv-community"]
 
     env:
       mainline_toolchain: https://github.com/riscv-collab/riscv-gnu-toolchain/releases/download/2024.03.01
@@ -54,7 +55,7 @@ jobs:
         with:
           repository: milkv-community/linux
           path: linux-riscv
-          ref: v6.9-rc4-milkv-community
+          ref: ${{ matrix.LINUX_BRANCH }}
 
       - name: Install software
         run: |
