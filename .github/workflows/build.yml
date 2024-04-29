@@ -153,4 +153,4 @@ jobs:
         with:
           name: image-${{ matrix.M_CHIP_NUM }}-${{ matrix.LINUX_BRANCH }}
           path: full_*
-          retention-days: 30
+          retention-days: 1
