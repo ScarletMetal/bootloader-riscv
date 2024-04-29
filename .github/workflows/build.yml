@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         M_CHIP_NUM: [single]
-        LINUX_BRANCH: ["v6.8-sg2042-milkv-community", "v6.9-rc4-milkv-community"]
+        LINUX_BRANCH: [sg2042-dev, sg2042-dev-6.6, sg2042-master]
 
     env:
       mainline_toolchain: https://github.com/riscv-collab/riscv-gnu-toolchain/releases/download/2024.03.01
@@ -53,7 +53,7 @@ jobs:
       - name: Checkout linux-riscv
         uses: actions/checkout@v4
         with:
-          repository: milkv-community/linux
+          repository: sophgo/linux-riscv
           path: linux-riscv
           ref: ${{ matrix.LINUX_BRANCH }}
 
